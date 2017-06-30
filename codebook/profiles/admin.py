@@ -110,7 +110,8 @@ class MyUserAdmin(UserAdmin):
 
 class ProfileAdmin(admin.ModelAdmin):
     form = ProfileForm
-    list_display = ('user',)
+    list_display = ('user', 'reputation')
+    list_filter = ('user__date_joined',)
     fieldsets = (
         (None, {'fields': ('user', )}),
         ('Profile Information', {'fields': ('reputation', 'follows')}),

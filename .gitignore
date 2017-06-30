@@ -84,6 +84,7 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
+virtualenv/
 
 # Spyder project settings
 .spyderproject
@@ -136,4 +137,5 @@ crashlytics-build.properties
 
 # Side notes and venv
 goodpractice.txt
+initialusermodel.py
 ~/

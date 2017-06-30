@@ -1,95 +1,3 @@
-'''
-Reasons for not using this: too much common ground with AbstractUser, redundancy
-class MyUserManager(BaseUserManager):
-    use_in_migrations = True
-
-    def create_user(self, email, first_name, last_name, password=None):
-        """
-        Creates and saves a User with the given email, date of
-        birth and password.
-        """
-        if not email:
-            raise ValueError('Users must have an email address')
-
-        user = self.model(
-            email=self.normalize_email(email),
-            first_name=first_name,
-            last_name=last_name
-        )
-
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, first_name, last_name, password):
-        """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
-        """
-        user = self.create_user(
-            email,
-            password=password,
-            first_name=first_name,
-            last_name=last_name
-        )
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
-
-
-class MyUser(AbstractBaseUser):
-    email = models.EmailField(
-        _('email address'),
-        max_length=255,
-        unique=True,
-        error_messages={
-            'unique': 'A user with that email address already exists.',
-        }
-    )
-    is_admin = models.BooleanField(
-        _('staff status'),
-        default=False,
-        help_text=_('Designates whether the user can log into this admin site.'),
-    )
-    is_active = models.BooleanField(
-        _('active'),
-        default=True,
-        help_text=_(
-            'Designates whether this user should be treated as active. '
-        ),
-    )
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-
-    objects = MyUserManager()
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
-
-    def clean(self):
-        super().clean()
-        self.email = self.__class__.objects.normalize_email(self.email)
-
-    def get_full_name(self):
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
-
-    def get_short_name(self):
-        return self.first_name
-
-    def has_perm(self, perm, obj=None):
-        return True
-
-    def has_module_perms(self, app_label):
-        return True
-
-    @property
-    def is_staff(self):
-        return self.is_admin
-
-    def email_user(self, subject, message, from_email=None, **kwargs):
-        send_mail(subject, message, from_email, [self.email], **kwargs)
-
-'''
 from __future__ import unicode_literals
 
 from django.db import models
@@ -99,10 +7,11 @@ from django.urls import reverse
 from django.contrib.auth import password_validation
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, FieldError
 from django.utils.translation import gettext_lazy as _
 
 from .utils import generate_random_username, perform_reputation_check
+from posts.models import Vote
 
 
 class MyUserManager(BaseUserManager):
@@ -166,6 +75,28 @@ class MyUser(AbstractUser):
     def get_absolute_url(self):
         return reverse('profiles:profile', kwargs={'pk': self.id})
 
+    def vote_for_question(self, question, vote):
+        if vote not in Vote.VOTE_CHOICES:
+            raise FieldError(_('Invalid value for field "Vote"'))
+        try:
+            vote_object = Vote.objects.get(voted_by=self, question=question)
+            if vote_object.vote != vote:
+                vote_object.vote = vote
+                vote_object.save()
+        except Vote.DoesNotExist:
+            Vote.objects.create(voted_by=self, question=question, vote=vote)
+
+    def vote_for_answer(self, answer, vote):
+        if vote not in Vote.VOTE_CHOICES:
+            raise FieldError(_('Invalid value for field "Vote"'))
+        try:
+            vote_object = Vote.objects.get(voted_by=self, answer=answer)
+            if vote_object.vote != vote:
+                vote_object.vote = vote
+                vote_object.save()
+        except Vote.DoesNotExist:
+            Vote.objects.create(voted_by=self, answer=answer, vote=vote)
+
 
 @python_2_unicode_compatible
 class Profile(models.Model):
@@ -173,20 +104,19 @@ class Profile(models.Model):
     SEASONED = 'seasoned'
     TOP_USER = 'topuser'
     GURU = 'guru'
-    REPURATION_CHOICES = (
-        (AMATEUR, 'Amateur'),
-        (SEASONED, 'Seasoned'),
-        (TOP_USER, 'Top User'),
-        (GURU, 'Guru'),
+    REPUTATION_CHOICES = (
+        (AMATEUR, _('Amateur')),
+        (SEASONED, _('Seasoned')),
+        (TOP_USER, _('Top User')),
+        (GURU, _('Guru')),
     )
     reputation = models.CharField(
         max_length=8,
-        choices=REPURATION_CHOICES,
+        choices=REPUTATION_CHOICES,
         default=AMATEUR
     )
     user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
-    follows = models.ManyToManyField('Profile', related_name='followed_by',
-                                     symmetrical=False, blank=True)
+    follows = models.ManyToManyField('Profile', symmetrical=False, blank=True)
 
     def __str__(self):
         return self.user.get_full_name()
@@ -204,6 +134,3 @@ class Profile(models.Model):
             raise ValidationError({'follows': _('User cannot follow self')})
         if perform_reputation_check(self.user) != self.reputation:
             raise ValidationError({'reputation': _('Selected reputation level has not been reached')})
-
-
-

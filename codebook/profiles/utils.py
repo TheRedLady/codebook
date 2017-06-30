@@ -3,16 +3,16 @@ from django.utils.crypto import get_random_string
 
 REPUTATION_RANGES = {
     'amateur': {
-        'questions': range(0, 50),
-        'answers': range(0, 50)
+        'answers': range(0, 50),
+        'top_answers': (0, 5)
     },
     'seasoned': {
-        'questions': range(50, 100),
         'answers': range(50, 150),
+        'top_answers': (15, 30)
     },
     'topuser': {
-        'questions': range(100, 200),
         'answers': range(150, 300),
+        'top_answers': (30, 70)
     }
 }
 allowed_chars = 'abcdefghtuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'
@@ -31,17 +31,16 @@ def generate_random_username(length=10, allowed_characters=allowed_chars):
 
 def perform_reputation_check(user):
     answers = user.answers.all()
-    answers_count = len([answer for answer in answers if answer.is_top_answer])
-    questions = user.questions.all()
-    questions_count = len([question for question in questions if question.is_popular])
+    answers_count = answers.count()
+    top_answers_count = len([answer for answer in answers if answer.is_top_answer])
     from .models import Profile
     if answers_count in REPUTATION_RANGES['amateur']['answers'] \
-            or questions_count in REPUTATION_RANGES['amateur']['questions']:
+            or top_answers_count in REPUTATION_RANGES['amateur']['top_answers']:
         return Profile.AMATEUR
     if answers_count in REPUTATION_RANGES['seasoned']['answers'] \
-            or questions_count in REPUTATION_RANGES['seasoned']['questions']:
+            or top_answers_count in REPUTATION_RANGES['seasoned']['top_answers']:
         return Profile.SEASONED
     if answers_count in REPUTATION_RANGES['topuser']['answers'] \
-            or questions_count in REPUTATION_RANGES['topuser']['questions']:
+            or top_answers_count in REPUTATION_RANGES['topuser']['top_answers']:
         return Profile.TOP_USER
     return Profile.GURU

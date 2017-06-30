@@ -14,13 +14,13 @@ class TagInline(admin.TabularInline):
 
 
 class QuestionModelAdmin(admin.ModelAdmin):
-    list_display = ['question_title', 'author', 'created', 'votes', 'answers_count']
+    list_display = ['title', 'author', 'created', 'votes', 'answers_count']
     list_filter = ['created']
     fieldsets = [
-        ('Question', {'fields': ['author', 'created', 'question_title', 'question_content', 'tags']})
+        ('Question', {'fields': ['author', 'created', 'title', 'content', 'tags']})
     ]
     readonly_fields = ('created',)
-    search_fields = ['question_title', 'author__email']
+    search_fields = ['title', 'author__email']
     inlines = [AnswerInline]
     filter_horizontal = ('tags',)
 
@@ -29,13 +29,13 @@ class QuestionModelAdmin(admin.ModelAdmin):
 
 
 class AnswerModelAdmin(admin.ModelAdmin):
-    list_display = ['content', 'author', 'question', 'votes']
+    list_display = ['content', 'author', 'question', 'votes', 'is_top_answer']
     list_filter = ['author']
     fieldsets = [
         ('Answer', {'fields': ['author', 'question', 'content', 'votes']})
     ]
     readonly_fields = ('created',)
-    search_fields = ['question__question_title', 'author__email', 'content']
+    search_fields = ['question__title', 'author__email', 'content']
 
     class Meta:
         model = Answer
