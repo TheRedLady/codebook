@@ -178,19 +178,13 @@ class Vote(models.Model):
             ('voted_by', 'answer')
         )
 
-    def __init__(self, *args, **kwargs):
-        super(Vote, self).__init__(*args, **kwargs)
-        self.__original_vote = self.vote
-
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         """
         Override save method to update question or answer votes. Alternative to signals.
         """
-        obj = self.question if self.question is not None else self.answer
-        if self.__original_vote != self.vote:
-            update_votes(self.vote, obj, self.pk is None)
         super(Vote, self).save(force_insert, force_update, *args, **kwargs)
-        self.__original_vote = self.vote
+        obj = self.question if self.question is not None else self.answer
+        update_votes(self.vote, obj, self.pk is None)
 
     def __str__(self):
         return "{}vote by {}".format(self.vote, self.voted_by)

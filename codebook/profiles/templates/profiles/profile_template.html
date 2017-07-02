@@ -11,7 +11,13 @@
         {% include 'posts/ask_question_form.html' %}
     </div>
     <h3>Questions</h3>
+    <div data-bind="if: !questionContainer.questions().length">
+        <p>List is empty.</p>
+    </div>
     <div data-bind="template: { name: 'question-list-item-template', foreach: questionContainer.questions }"></div>
     <h3>Answers</h3>
+    <div data-bind="if: !answers().length">
+        <p>List is empty.</p>
+    </div>
     <div data-bind="template: { name: 'answer-template', foreach: answers }"></div>
 </template>

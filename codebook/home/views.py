@@ -26,4 +26,4 @@ def sign_up(request):
             registered = True
     else:
         form = SignUpForm()
-    return render(request, 'signup.html', {'form': form, 'registered': registered})
+    return render(request, 'home/signup.html', {'form': form, 'registered': registered})

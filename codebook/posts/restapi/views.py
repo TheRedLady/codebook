@@ -45,12 +45,13 @@ class QuestionViewSet(ModelViewSet):
     def vote(self, request, pk=None, vote=None):
         question = self.get_object()
         try:
-            vote_object = Vote.objects.get(voted_by=request.user, question=question)
+            Vote.objects.get(voted_by=request.user, question=question)
+            obj = Vote.objects.get(voted_by=request.user, question=question)
             return Response({
                 'status': True,
                 'question_id': question.id,
-                'message': '{} has {}voted answer with id {}'.format(request.user, vote_object.vote, question.id),
-                'vote': vote_object.vote,
+                'message': '{} has {}voted answer with id {}'.format(request.user, obj.vote, question.id),
+                'vote': obj.vote,
                 'total_votes': question.votes
             })
         except Vote.DoesNotExist:
@@ -163,12 +164,13 @@ class AnswerViewSet(ModelViewSet):
     def vote(self, request, pk=None, vote=None):
         answer = self.get_object()
         try:
-            vote_object = Vote.objects.get(voted_by=request.user, answer=answer)
+            Vote.objects.get(voted_by=request.user, answer=answer)
+            obj = Vote.objects.get(voted_by=request.user, answer=answer)
             return Response({
                 'status': True,
                 'answer_id': answer.id,
-                'message': '{} has {}voted answer with id {}'.format(request.user, vote_object.vote, answer.id),
-                'vote': vote_object.vote,
+                'message': '{} has {}voted answer with id {}'.format(request.user, obj.vote, answer.id),
+                'vote': obj.vote,
                 'total_votes': answer.votes
             })
         except Vote.DoesNotExist:

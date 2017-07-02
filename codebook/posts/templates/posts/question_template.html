@@ -1,13 +1,17 @@
 <template id="question-template">
-    <h2 data-bind="text: title"/>
+    <h2 data-bind="text: title"></h2>
     <h3 data-bind="if: isPopular">Popular right now</h3>
-    <h3 data-bind="text: content"/>
+    <h3 data-bind="text: content"></h3>
     <p>Question by
         <a data-bind="attr: { href: author().profileUrl, title: author().fullName }, text: author().fullName"></a>
     </p>
     <p>Total votes: <span data-bind="text: votes"></span> </p>
-    <p> Published <span data-bind="text: datePublished"></span> </p>
-    <div data-bind="if: author().profileId != userId">
+    <p>Published <span data-bind="text: datePublished"></span> </p>
+    <!--<div data-bind="if: author().profileId != userId && !voted">-->
+        <!--<button id="upvote-button" data-bind="click: upvote, text: 'Upvote'"></button>-->
+        <!--<button id="downvote-button" data-bind="click: downvote, text: 'Downvote'"></button>-->
+    <!--</div>-->
+    <div data-bind="if: author.profileId != {{ request.user.id }} && !voted()">
         <button id="upvote-button" data-bind="click: upvote, text: 'Upvote'"></button>
         <button id="downvote-button" data-bind="click: downvote, text: 'Downvote'"></button>
     </div>
@@ -20,5 +24,8 @@
         </a>
     </div>
     {% include 'posts/add_answer_form.html' %}
-    <div data-bind="template: { name: 'answer-template', foreach: answers }"></div>
+    <div data-bind="if: !sortedAnswers().length">
+        <h4>There are no answers to this question.</h4>
+    </div>
+    <div data-bind="template: { name: 'answer-template', foreach: sortedAnswers }"></div>
 </template>

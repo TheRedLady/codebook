@@ -9,10 +9,9 @@ from profiles.utils import perform_reputation_check
 def update_reputation(sender, instance, created, **kwargs):
     if created:
         return
-    user = instance.user
+    user = instance.author
     profile = user.profile
     reputation = perform_reputation_check(user)
     if profile.reputation != reputation:
         profile.reputation = reputation
         profile.save()
-

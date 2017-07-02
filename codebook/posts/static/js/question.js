@@ -11,6 +11,10 @@ function QuestionViewModel(params) {
     self.tags = ko.observableArray([]);
     self.isPopular = ko.observable(false);
     self.answers = ko.observableArray([]);
+    self.newAnswerContent = ko.observable('');
+    self.sortedAnswers = ko.computed(function () {
+        return self.answers().sort(compareAnswers);
+    });
 
     self.upvote = upvote;
     self.downvote = downvote;
@@ -109,6 +113,16 @@ function QuestionViewModel(params) {
     function removeAnswer(answer) {
         answer.remove();
         self.answers.remove(answer);
+    }
+
+    function compareAnswers(first, second) {
+        if (first.votes() > second.votes()) {
+            return -1;
+        }
+        if (second.votes() > first.votes()) {
+            return 1;
+        }
+        return 0;
     }
 };
 

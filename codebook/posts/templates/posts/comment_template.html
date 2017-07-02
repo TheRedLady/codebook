@@ -1,5 +1,8 @@
 <template id="comment-template">
-    <p data-bind="text: content"/>
+    <h5 data-bind="text: content"></h5>
     <p>Comment by <a data-bind="attr: { href: author.profileUrl }"><span data-bind="text: author.fullName"/> </a></p>
     <p> Published <span data-bind="text: datePublished"></span> </p>
+    <div data-bind="if: author.profileId == {{ request.user.id }}">
+        <button id="delete-comment" data-bind="click: $parent.removeComment.bind($data)">Delete</button>
+    </div>
 </template>

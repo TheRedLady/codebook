@@ -84,7 +84,7 @@ class AnswerSerializer(serializers.ModelSerializer):
     def get_question(self, obj):
         return {
             'id': obj.question.id,
-            'url': reverse('posts:question-detail', args=(obj.id,)),
+            'url': reverse('posts:question-detail', args=(obj.question.id,)),
             'title': obj.question.title
         }
 
