@@ -13,14 +13,6 @@ from django.utils.translation import gettext_lazy as _
 from .utils import update_votes
 
 
-PUBLISHED_RECENTLY_QUESTION_TIMEDELTA = 14
-PUBLISHED_RECENTLY_ANSWER_TIMEDELTA = 14
-PUBLISHED_RECENTLY_QUESTION_VOTES = 100
-POPULAR_QUESTION_VOTES = 400
-POPULAR_QUESTION_RECENT_ANSWERS = 1
-TRENDING_TAGS_COUNT = 20
-
-
 class TimeStampedModel(models.Model):
     PUBLISHED_RECENTLY_TIMEDELTA = 14
     created = models.DateTimeField(_('date published'), auto_now_add=True)
@@ -76,8 +68,6 @@ class Question(TimeStampedModel):
         A question is popular if it has been published recently and has more than a certain amount of votes
         (a predetermined constant) or has answers published in the last seven days and has more than a
          certain amount of votes (again predetermined constant).
-        :param self: instance of Question
-        :return: True or False depending on whether self is a popular Question
         """
         answers = self.answers.filter(
             created__gte=timezone.now() - datetime.timedelta(days=Question.PUBLISHED_RECENTLY_TIMEDELTA)
@@ -104,9 +94,7 @@ class Answer(TimeStampedModel):
 
     def is_top_answer(self):
         """Determines whether answer is top answer for the associated question.
-        Top answer for a question the most recently published and with the most votes.
-        :param self: self is an instance of Answer
-        :return: True or False depending on whether self is a top answer
+        Top answer for a question is the most recently published one and with the most votes.
         """
         most_votes = self.question.answers.all().aggregate(models.Max('votes'))['votes__max']
         top_answers = self.question.answers.filter(votes=most_votes).order_by('-created')

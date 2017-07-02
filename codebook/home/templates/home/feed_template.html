@@ -1,0 +1,13 @@
+<template id="feed-template">
+    <h3>Questions</h3>
+     <div data-bind="if: !questionContainer.questions().length">
+        <p>No questions.</p>
+    </div>
+    {% include 'posts/ask_question_form.html' %}
+    <div data-bind="template: { name: 'question-list-item-template', foreach: questionContainer.questions }"></div>
+    <h3>Answers</h3>
+    <div data-bind="if: !answers().length">
+        <p>No answers.</p>
+    </div>
+    <div data-bind="template: { name: 'answer-list-item-template', foreach: answers }"></div>
+</template>

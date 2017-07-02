@@ -1,0 +1,19 @@
+<template id="answer-template">
+    <h2 data-bind="if: isTopAnswer">Top Answer</h2>
+    <h3 data-bind="text: content"/>
+    <h2>Answer by <a data-bind="attr: { href: author.profileUrl }"><span data-bind="text: author.fullName"/> </a></h2>
+    <h2>Total votes: <span data-bind="text: votes()"/> </h2>
+    <p> Published <span data-bind="text: datePublished"></span> </p>
+    <div data-bind="if: author.profileId != {{ request.user.id }} && !voted()">
+        <button id="upvote-button" data-bind="click: upvote, text: 'Upvote'"></button>
+        <button id="downvote-button" data-bind="click: downvote, text: 'Downvote'"></button>
+    </div>
+    <div data-bind="if: voted()">
+        <p>You <span data-bind="text: voted"></span>voted this answer.</p>
+    </div>
+    <div data-bind="if: author.profileId == {{ request.user.id }}">
+        <button id="delete-answer" data-bind="click: $parent.removeAnswer.bind($data)">Delete</button>
+    </div>
+    <div data-bind="template: { name: 'comment-template', foreach: comments }"></div>
+    {% include 'posts/add_comment_form.html' %}
+</template>

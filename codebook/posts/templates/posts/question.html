@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+{% include 'posts/comment_template.html' %}
+{% include 'posts/answer_template.html' %}
+{% include 'posts/question_template.html' %}
+
+<question-component params="id: {{ object.id }}, user_id: {{ request.user.id }}"/>
+
+<script language="javascript" type="text/javascript" src="{% static '/js/tag.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/author.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/answer.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/question.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/main.js' %}"></script>
+
+{% endblock content %}

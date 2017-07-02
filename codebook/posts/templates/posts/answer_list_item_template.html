@@ -1,0 +1,8 @@
+<template id="answer-template">
+    <h2 data-bind="if: isTopAnswer">Top Answer</h2>
+    <h3 data-bind="text: content"/>
+    <h4>Answer by <a data-bind="attr: { href: author.profileUrl }"><span data-bind="text: author.fullName"/> </a></h4>
+    <h3>Total votes: <span data-bind="text: votes()"/> </h3>
+    <p> Published <span data-bind="text: datePublished"></span> </p>
+    <a data-bind="attr: { href: questionUrl, title: 'Go to question' }, text: 'Question'"></a>
+</template>

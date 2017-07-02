@@ -1,0 +1,6 @@
+<form data-bind="submit: addComment">
+    <br>
+    <textarea data-bind="value: newCommentContent" cols="40" row="3" placeholder="Comment on this answer"></textarea>
+    <button data-bind="click: addComment.bind($data, {{ request.user.id }})">Comment</button>
+    <br>
+</form>

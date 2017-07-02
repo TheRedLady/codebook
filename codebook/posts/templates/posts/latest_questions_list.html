@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+{% include 'posts/question_list_item_template.html' %}
+{% include 'posts/questions_list_template.html' %}
+
+<h1>Latest Questions</h1>
+
+<questions-list-component params="{ page: QUESTION_PAGES.LATEST }"/>
+
+
+<script language="javascript" type="text/javascript" src="{% static '/js/trimTextBinding.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/author.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/question.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/questionsList.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/main.js' %}"></script>
+
+{% endblock content %}

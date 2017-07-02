@@ -1,0 +1,24 @@
+<template id="question-template">
+    <h2 data-bind="text: title"/>
+    <h3 data-bind="if: isPopular">Popular right now</h3>
+    <h3 data-bind="text: content"/>
+    <p>Question by
+        <a data-bind="attr: { href: author().profileUrl, title: author().fullName }, text: author().fullName"></a>
+    </p>
+    <p>Total votes: <span data-bind="text: votes"></span> </p>
+    <p> Published <span data-bind="text: datePublished"></span> </p>
+    <div data-bind="if: author().profileId != userId">
+        <button id="upvote-button" data-bind="click: upvote, text: 'Upvote'"></button>
+        <button id="downvote-button" data-bind="click: downvote, text: 'Downvote'"></button>
+    </div>
+    <div data-bind="if: voted">
+        <p> You <span data-bind="text: voted"></span>voted this question. </p>
+    </div>
+    <div data-bind="foreach: tags">
+        <a data-bind="attr: { href: tagUrl }, style: { background: isTrending ? 'yellow' : null }">
+            <span data-bind="text: tag"></span>
+        </a>
+    </div>
+    {% include 'posts/add_answer_form.html' %}
+    <div data-bind="template: { name: 'answer-template', foreach: answers }"></div>
+</template>

@@ -1,0 +1,9 @@
+<form data-bind="submit: questionContainer.addQuestion">
+    <h5>Ask a question:</h5>
+    <br>
+    <textarea data-bind="value: questionContainer.newQuestionTitle" cols="40" row="3" placeholder="Short description of your question"></textarea>
+    <textarea data-bind="value: questionContainer.newQuestionContent" cols="40" rows="5" placeholder="Having some programming trouble?"></textarea> <br>
+    <input data-bind="jqAuto: { value: questionContainer.newValue, source: questionContainer.tags }" />
+    <button data-bind="click: questionContainer.addTag">Add tag</button>
+    <button data-bind="click: questionContainer.addQuestion.bind($data, userId, append)">Ask</button>
+</form>

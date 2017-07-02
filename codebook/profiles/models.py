@@ -73,10 +73,10 @@ class MyUser(AbstractUser):
             self._password = None
 
     def get_absolute_url(self):
-        return reverse('profiles:profile', kwargs={'pk': self.id})
+        return reverse('profiles:profile-detail', kwargs={'pk': self.id})
 
     def vote_for_question(self, question, vote):
-        if vote not in Vote.VOTE_CHOICES:
+        if vote not in (Vote.UP, Vote.DOWN):
             raise FieldError(_('Invalid value for field "Vote"'))
         try:
             vote_object = Vote.objects.get(voted_by=self, question=question)
@@ -87,7 +87,7 @@ class MyUser(AbstractUser):
             Vote.objects.create(voted_by=self, question=question, vote=vote)
 
     def vote_for_answer(self, answer, vote):
-        if vote not in Vote.VOTE_CHOICES:
+        if vote not in (Vote.UP, Vote.DOWN):
             raise FieldError(_('Invalid value for field "Vote"'))
         try:
             vote_object = Vote.objects.get(voted_by=self, answer=answer)

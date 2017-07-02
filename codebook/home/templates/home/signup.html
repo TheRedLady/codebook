@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Sign up for Codebook</h1>
+{% if user.is_authenticated %}
+  <strong>Please logout first in order to sign up!</strong>
+  <p><a href="{% url 'logout' %}"> Log out </a></p>
+{% elif registered %}
+  <strong>Thank you for signing up!</strong>
+  <p><a href="{% url 'login' %}"> Log in </a></p>
+{% else %}
+<div class="registration-form">
+  <strong>Sign up here</strong>
+  <form id="form" method="post" action="">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" name="submit" value="Sign up" />
+  </form>
+</div>
+{% endif %}
+{% endblock content %}

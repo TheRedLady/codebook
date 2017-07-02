@@ -54,12 +54,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    #url = serializers.HyperlinkedIdentityField(view_name='profile-detail')
+    url = serializers.HyperlinkedIdentityField(view_name='profiles:profile-detail')
     full_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
-        fields = ['user_id', 'full_name']
+        fields = ['user_id', 'full_name', 'url']
 
     def get_full_name(self, obj):
         return obj.user.get_full_name()
@@ -88,16 +88,31 @@ class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     reputation = serializers.CharField(max_length=8, read_only=True)
     follows = FollowSerializer(read_only=True, many=True)
-    #url = serializers.HyperlinkedIdentityField(view_name='restapi:profile-detail')
+    url = serializers.HyperlinkedIdentityField(view_name='profiles:profile-detail')
+    questions_count = serializers.SerializerMethodField()
+    answers_count = serializers.SerializerMethodField()
+    followed_by = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
         fields = [
-            #'url',
+            'url',
             'user',
             'reputation',
             'follows',
+            'questions_count',
+            'answers_count',
+            'followed_by'
         ]
+
+    def get_questions_count(self, obj):
+        return obj.user.questions.count()
+
+    def get_answers_count(self, obj):
+        return obj.user.answers.count()
+
+    def get_followed_by(self, obj):
+        return obj.profile_set.count()
 
 
 class UpdateProfileSerializer(serializers.ModelSerializer):
@@ -132,8 +147,7 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
 
 
 class AuthorSerializer(serializers.ModelSerializer):
-
-    url = serializers.SerializerMethodField()
+    url = serializers.HyperlinkedIdentityField(view_name='profiles:profile-detail')
     full_name = serializers.SerializerMethodField()
 
     class Meta:
@@ -147,6 +161,3 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, obj):
         return obj.get_full_name()
-
-    def get_url(self, obj):
-        return obj.get_absolute_url()

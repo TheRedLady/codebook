@@ -1,0 +1,5 @@
+<template id="comment-template">
+    <p data-bind="text: content"/>
+    <p>Comment by <a data-bind="attr: { href: author.profileUrl }"><span data-bind="text: author.fullName"/> </a></p>
+    <p> Published <span data-bind="text: datePublished"></span> </p>
+</template>

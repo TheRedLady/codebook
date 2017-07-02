@@ -1,0 +1,17 @@
+<template id="profile-template">
+    <h1 data-bind="text: fullName"></h1>
+    <h2>Reputation: <span data-bind="text: reputation"></span> </h2>
+    <h3 data-bind="if: answersCount">Answered <span data-bind="text: answersCount"></span> question(s) </h3>
+    <h3 data-bind="if: questionsCount">Asked <span data-bind="text: questionsCount"></span> question(s) </h3>
+    <h2 data-bind="if: followedBy()">Followed by: <span data-bind="text: followedBy()"></span> people </h2>
+    <div data-bind="if: self.profileId != self.userId">
+        <button id="follow-button" data-bind="click: follow, text: following() ? 'Unfollow' : 'Follow' "></button>
+    </div>
+    <div data-bind="if: self.profileId == self.userId">
+        {% include 'posts/ask_question_form.html' %}
+    </div>
+    <h3>Questions</h3>
+    <div data-bind="template: { name: 'question-list-item-template', foreach: questionContainer.questions }"></div>
+    <h3>Answers</h3>
+    <div data-bind="template: { name: 'answer-template', foreach: answers }"></div>
+</template>

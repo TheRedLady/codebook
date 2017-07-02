@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} {{ profile }} | {{ block.super }} {% endblock title %}
+{% block content %}
+
+
+{% include 'posts/answer_list_item_template.html' %}
+{% include 'posts/question_list_item_template.html' %}
+{% include 'profiles/profile_template.html' %}
+
+<profile-component params="id: {{ object.user_id }}, user_id: {{ request.user.id }}"/>
+
+<script language="javascript" type="text/javascript" src="{% static '/js/tag.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/author.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/answersList.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/questionsList.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/forms.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/profile.js' %}"></script>
+
+{% endblock content%}

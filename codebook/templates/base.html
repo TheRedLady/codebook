@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Codebook{% endblock title %}</title>
+    <style> {% block style %}{% endblock style %} </style>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'js/jquery-ui-1.12.1/jquery-ui.min.css' %}">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="  crossorigin="anonymous"></script>
+    <script language="javascript" type='text/javascript' src="{% static 'js/knockout-3.4.2.js' %}"></script>
+    <script language="javascript" type='text/javascript' src="{% static 'js/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+    <script language="javascript" type='text/javascript' src="{% static 'js/knockout-jqAutocomplete.js' %}"></script>
+    <script language="javascript" type="text/javascript" src="{% static 'js/constants.js' %}"></script>
+    <script language="javascript" type="text/javascript" src="{% static 'js/base.js' %}"></script>
+</head>
+<body>
+
+  <header id="header">
+    <h1><a href="{% url 'home' %}"> Look for answers in Codebook </a></h1>
+
+    <nav id="nav">
+	<ul>
+ 	{% if user.is_authenticated %}
+          <li><a href="{% url 'home' %}">Questions</a></li>
+          <li><a href="{% url 'profiles:go-to-profile' %}">My Profile</a></li>
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'signup' %}">Sign up</a></li>
+          <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+	</ul>
+    </nav>
+  </header>
+
+    <div id="main">
+        {% include 'messages_display.html' %}
+        <div class="container" id="container">
+            {% block content %}{% endblock content %}
+        </div>
+    </div>
+</body>
+</html>

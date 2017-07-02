@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<h2> You are at the feed page! </h2>
+
+<p> You are now logged in as {{ request.user.get_full_name }} </p>
+
+{% include 'posts/answer_list_item_template.html' %}
+{% include 'posts/question_list_item_template.html' %}
+{% include 'home/feed_template.html' %}
+
+<feed-component params="user_id: {{ request.user.id }}"/>
+
+<script language="javascript" type="text/javascript" src="{% static '/js/tag.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/author.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/answersList.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/questionsList.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static 'js/forms.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static 'js/feed.js' %}"></script>
+
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+{% include 'posts/tag_template.html' %}
+
+<h1>All Tags</h1>
+
+<tags-list-component params="{ page: TAG_PAGES.ALL }"/>
+
+<script language="javascript" type="text/javascript" src="{% static '/js/tagsList.js' %}"></script>
+<script language="javascript" type="text/javascript" src="{% static '/js/main.js' %}"></script>
+
+{% endblock content %}

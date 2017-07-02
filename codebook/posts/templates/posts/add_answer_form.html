@@ -1,0 +1,6 @@
+<form data-bind="submit: addAnswer">
+    <br>
+    <textarea data-bind="value: newAnswerContent" cols="40" row="3" placeholder="Give an answer"></textarea>
+    <button data-bind="click: addAnswer.bind($data)">Answer</button>
+    <br>
+</form>

@@ -1,0 +1,15 @@
+<template id="question-list-item-template">
+    <h1><a data-bind="attr: { href: questionUrl, title: 'Question Details' }, text: title"></a> </h1>
+    <h2 data-bind="if: isPopular && self.page != QUESTION_PAGE.POPULAR">Popular right now</h2>
+    <p data-bind="trimText: content"></p>
+    <p>Question by
+        <a data-bind="attr: { href: author.profileUrl, title: author.fullName + ' Profile'}, text: author.fullName"></a>
+    </p>
+    <h3>Total votes: <span data-bind="text: votes"/> </h3>
+    <p> Published <span data-bind="text: datePublished"/> </p>
+    <div data-bind="foreach: tags">
+        <a data-bind="attr: { href: tagUrl }, style: { background: isTrending ? 'yellow' : null }">
+            <span data-bind="text: tag"></span>
+        </a>
+    </div>
+</template>

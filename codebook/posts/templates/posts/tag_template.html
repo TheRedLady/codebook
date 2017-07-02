@@ -1,0 +1,13 @@
+<template id="tag-template">
+    <a data-bind="attr: { href: tagUrl, title: tag }, text: tag, style: { background: isTrending ? 'yellow' : '' }"></a>
+    <p>
+        Occurences: <span data-bind="text: occurrences"></span>
+    </p>
+</template>
+
+<template id="tags-list-template">
+    <div data-bind="if: !tags().length">
+        <p>There are no tags.</p>
+    </div>
+    <div data-bind="template: { name: 'tag-template', foreach: tags }"></div>
+</template>

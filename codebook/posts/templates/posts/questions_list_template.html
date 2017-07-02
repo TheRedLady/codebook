@@ -1,0 +1,6 @@
+<template id="questions-list-template">
+    <div data-bind="if: !questions().length">
+        <p>There are no questions.</p>
+    </div>
+    <div data-bind="template: { name: 'question-list-item-template', foreach: questions }"></div>
+</template>

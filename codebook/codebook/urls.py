@@ -19,7 +19,11 @@ from django.contrib import admin
 from .routers import router
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^', include('django.contrib.auth.urls')),
+    url(r'^', include('home.urls')),
+    url(r'^', include('posts.urls', namespace='posts')),
+    url(r'^profile/', include('profiles.urls', namespace='profiles')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^restapi/', include(router.urls, namespace='restapi')),
+    url(r'^admin/', admin.site.urls),
 ]
